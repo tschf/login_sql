@@ -9,9 +9,8 @@ REM I like to have serveroutput on by default. Set with a large size so I can
 REM have lots of output.
 set serveroutput on size 100000
 
-REM Since I like mode code to be within the 80 character boundary, I will start
-REM with SQL*Plus set to the same width.
-set linesize 80
+REM A size of 130 gives a good width for the explain plan to be rendered properly
+set linesize 130
 
 REM I do not need SQL*Plus to continually print the column headers, so I will
 REM use a large pagesize
