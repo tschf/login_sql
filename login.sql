@@ -39,5 +39,9 @@ from instance_info;
 
 set sqlprompt '&gname> '
 
+REM If we are using SQLcl, it supports the ansiconsole format which gives a much
+REM more pleasant feel. This will silently die in SQL*Plus
+set sqlformat ansiconsole
+
 REM We are all done now, so we can turn termout back on
 set termout on
