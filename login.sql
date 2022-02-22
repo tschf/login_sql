@@ -19,21 +19,22 @@ set pagesize 9999
 REM The default length of object_name is too long. Reduce the default width
 REM so the query is more readable on the screen. Add any other commonly queried
 REM table columns.
-column objecT_name format a30
+column object_name format a30
 
 define gname=idle
 column global_name new_value gname
 with instance_info as (
     select
-        global_name
-      , instr(global_name, '.') dot_index
-    from 
+        lower(global_name) global_name,
+        instr(global_name, '.') dot_index
+    from
         global_name
 )
 select
-    lower(user) 
-        || '@' 
-        || substr(global_name, 1, decode(dot_index, 0, length(global_name), dot_index-1)) global_name
+    substr(global_name, 1, decode(dot_index, 0, length(global_name), dot_index-1))
+    || ': '
+    || lower(user)
+    global_name
 from instance_info;
 
 set sqlprompt '&gname> '
