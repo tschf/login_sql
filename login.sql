@@ -2,6 +2,7 @@ REM whilst setting up the environment, I will turn off termout. After everything
 REM is set up as I like it, I will turn it back on so everything behaves as
 REM expect
 set termout off
+set sqlblanklinkeson
 
 define _editor=vim
 
