@@ -53,23 +53,13 @@ REM If we are using SQLcl, it supports the ansiconsole format which gives a much
 REM more pleasant feel. This will silently die in SQL*Plus
 set sqlformat ansiconsole
 
+REM load aliases from a separate file
+@sqlcl_aliases.sql
+
 REM Attempt to run a project_login.sql if it exists. This file might have interesting
 REM assignments specific to your project. Assumes you launch SQLcl from your
 REM project root
 @@project_login.sql
-
-REM Alias Definitions
-alias logger_debug_on=begin
-update logger_prefs set pref_value='DEBUG' where pref_name='LOG_LEVEL';
-commit;
-end;
-/
-
-alias logger_debug_off=begin
-update logger_prefs set pref_value='ERROR' where pref_name='LOG_LEVEL';
-commit;
-end;
-/
 
 REM We are all done now, so we can turn termout back on
 set termout on
