@@ -13,3 +13,13 @@ end;
 
 alias logger_prefs=select pref_name, pref_value from logger_prefs;
 alias logger_pref_level=select pref_name, pref_value from logger_prefs where pref_name = 'LOG_LEVEL';
+
+-- APEX
+set define #
+alias ae=q'<
+set define &
+-- no space between id and assignment is important
+tosub id=:app_id
+apex export -applicationid &id -split -exptype APPLICATION_SOURCE,READABLE_YAML
+>'
+/
