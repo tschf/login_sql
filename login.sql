@@ -6,10 +6,6 @@ set sqlblanklinkes on
 
 define _editor=vim
 
-REM I like to have serveroutput on by default. Set with a large size so I can
-REM have lots of output.
-set serveroutput on size 100000
-
 REM A size of 130 gives a good width for the explain plan to be rendered properly
 set linesize 130
 
@@ -63,3 +59,7 @@ REM project root
 
 REM We are all done now, so we can turn termout back on
 set termout on
+
+REM I like to have serveroutput on by default. Set with a large size so I can
+REM have lots of output.
+set serveroutput on size 16000
