@@ -62,4 +62,4 @@ set termout on
 
 REM I like to have serveroutput on by default. Set with a large size so I can
 REM have lots of output.
-set serveroutput on size 16000
+set serveroutput on
