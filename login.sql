@@ -60,6 +60,5 @@ REM project root
 REM We are all done now, so we can turn termout back on
 set termout on
 
-REM I like to have serveroutput on by default. Set with a large size so I can
-REM have lots of output.
+REM Put serveroutput on so we see output in plsql
 set serveroutput on
