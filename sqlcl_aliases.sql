@@ -15,19 +15,21 @@ alias logger_prefs=select pref_name, pref_value from logger_prefs;
 alias logger_pref_level=select pref_name, pref_value from logger_prefs where pref_name = 'LOG_LEVEL';
 
 -- COMMON
-alias listusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
-alias searchusers=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
+alias lsusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
+alias lsusersf=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
+alias lspdbs=select name, open_mode from v$pdbs;
+alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%';
 alias invalids=select owner, object_type, object_name, status
 from all_objects objs
 join all_users usr on (usr.username = objs.owner and usr.oracle_maintained = 'N')
 where objs.status != 'VALID';
 alias errinfo=select sys.standard.sqlerrm(-abs(:error_code)) error_text from dual;
 alias params=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter order by 1;
-alias paramsbasic=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isbasic = 'TRUE' order by 1;
 alias paramsdefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault = 'TRUE' order by 1;
-alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and isadjusted = 'TRUE' order by 1;
 alias paramsndefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault != 'TRUE' order by 1;
+alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and isadjusted = 'TRUE' order by 1;
 alias param=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, value, description from v$parameter where name = :param;
+alias trans=select case when dbms_transaction.step_id() is not null then 'Yes' else 'No' end pending_transaction from dual;
 alias objects=select object_name, object_type, status from all_objects where owner = upper(:input) order by 1,2;
 alias session_user=select sys_context('USERENV', 'SESSION_USER') session_user from dual;
 alias current_schema=select sys_context('USERENV', 'CURRENT_SCHEMA') current_schema from dual;
