@@ -1,0 +1,1 @@
+set sqlprompt '_CONNECT_IDENTIFIER: _USER> '
