@@ -25,6 +25,7 @@ join all_users usr on (usr.username = objs.owner and usr.oracle_maintained = 'N'
 where objs.status != 'VALID';
 alias errinfo=select sys.standard.sqlerrm(-abs(:error_code)) error_text from dual;
 alias params=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter order by 1;
+alias paramsf=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where name like '%' || :name || '%' order by 1;
 alias paramsdefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault = 'TRUE' order by 1;
 alias paramsndefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault != 'TRUE' order by 1;
 alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and isadjusted = 'TRUE' order by 1;
@@ -33,6 +34,7 @@ alias trans=select case when dbms_transaction.step_id() is not null then 'Yes' e
 alias objects=select object_name, object_type, status from all_objects where owner = upper(:input) order by 1,2;
 alias session_user=select sys_context('USERENV', 'SESSION_USER') session_user from dual;
 alias current_schema=select sys_context('USERENV', 'CURRENT_SCHEMA') current_schema from dual;
+alias epoch=select (sysdate-to_date('01-01-1970', 'DD-MM-YYYY'))*86400 epoch from dual;
 alias env=select res.*
 from (
   select *
