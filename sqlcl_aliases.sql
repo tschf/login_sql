@@ -21,6 +21,13 @@ alias invalids=select owner, object_type, object_name, status
 from all_objects objs
 join all_users usr on (usr.username = objs.owner and usr.oracle_maintained = 'N')
 where objs.status != 'VALID';
+alias errinfo=select sys.standard.sqlerrm(-abs(:error_code)) error_text from dual;
+alias params=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter order by 1;
+alias paramsbasic=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isbasic = 'TRUE' order by 1;
+alias paramsdefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault = 'TRUE' order by 1;
+alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and isadjusted = 'TRUE' order by 1;
+alias paramsndefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault != 'TRUE' order by 1;
+alias param=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, value, description from v$parameter where name = :param;
 alias objects=select object_name, object_type, status from all_objects where owner = upper(:input) order by 1,2;
 alias session_user=select sys_context('USERENV', 'SESSION_USER') session_user from dual;
 alias current_schema=select sys_context('USERENV', 'CURRENT_SCHEMA') current_schema from dual;
