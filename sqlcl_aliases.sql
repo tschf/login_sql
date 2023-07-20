@@ -15,8 +15,8 @@ alias logger_prefs=select pref_name, pref_value from logger_prefs;
 alias logger_pref_level=select pref_name, pref_value from logger_prefs where pref_name = 'LOG_LEVEL';
 
 -- COMMON
-alias lsusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
-alias lsusersf=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
+alias dbusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
+alias dbusersf=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
 alias lspdbs=select name, open_mode from v$pdbs;
 alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%';
 alias invalids=select owner, object_type, object_name, status
@@ -107,9 +107,18 @@ from (
 ) res;
 
 -- APEX
+alias ausers=select workspace_name, user_name, email, date_created, account_locked from apex_workspace_apex_users;
+alias ausersf=select workspace_name, user_name, email, date_created, account_locked from apex_workspace_apex_users where workspace_name like '%' || upper(:ws) || '%';
 alias aver=select version_no apex_version from apex_release;
 set define #
 alias ae=q'<
+set define &
+-- no space between id and assignment is important
+tosub id=:app_id
+apex export -applicationid &id -split -exptype APPLICATION_SOURCE
+>'
+/
+alias aey=q'<
 set define &
 -- no space between id and assignment is important
 tosub id=:app_id
