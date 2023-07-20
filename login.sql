@@ -36,6 +36,8 @@ REM assignments specific to your project. Assumes you launch SQLcl from your
 REM project root
 @@project_login.sql
 
+alter session set nls_date_format='DD-MON-YYYY';
+
 REM We are all done now, so we can turn termout back on
 set termout on
 
