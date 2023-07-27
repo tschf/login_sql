@@ -17,6 +17,15 @@ alias logger_pref_level=select pref_name, pref_value from logger_prefs where pre
 -- COMMON
 alias dbusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
 alias dbusersf=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
+alias desc2=select
+    column_name "Name",
+    case when nullable = 'N' then 'NOT NULL' end "Nullable?",
+    data_type || case when char_col_decl_length is not null then '(' || char_col_decl_length || ')' end "Type"
+from all_tab_cols
+where owner = sys_context('USERENV','CURRENT_SCHEMA')
+and table_name = upper(:table_name)
+order by internal_column_id;
+
 alias lspdbs=select name, open_mode from v$pdbs;
 alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%';
 alias invalids=select owner, object_type, object_name, status
