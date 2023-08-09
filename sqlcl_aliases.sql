@@ -124,14 +124,14 @@ alias ae=q'<
 set define &
 -- no space between id and assignment is important
 tosub id=:app_id
-apex export -applicationid &id -split -exptype APPLICATION_SOURCE
+apex export -applicationid &id -exptranslations -split -exptype APPLICATION_SOURCE
 >'
 /
 alias aey=q'<
 set define &
 -- no space between id and assignment is important
 tosub id=:app_id
-apex export -applicationid &id -split -exptype APPLICATION_SOURCE,READABLE_YAML
+apex export -applicationid &id -exptranslations -split -exptype APPLICATION_SOURCE,READABLE_YAML
 >'
 /
 
