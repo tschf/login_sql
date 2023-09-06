@@ -29,71 +29,71 @@ order by internal_column_id;
 -- Query to find FK's without an index. Adapted from Rich Soule:
 -- https://carsandcode.com/2023/09/01/finding-unindexed-foreign-keys-in-oracle-now-with-index-creation-ddl/
 alias fkindexes=with owner_exclusion_list as (
-   select username from all_users where oracle_maintained ='Y'
-   union all select 'ORDS_METADATA' from dual
-   union all select 'ORDS_PUBLIC_USER' from dual
-   union all select 'ORDS_PUBLIC_USER2' from dual
+  select username from all_users where oracle_maintained ='Y'
+  union all select 'ORDS_METADATA' from dual
+  union all select 'ORDS_PUBLIC_USER' from dual
+  union all select 'ORDS_PUBLIC_USER2' from dual
 ), constraint_columns as (
-   select
-      owner,
-      table_name,
-      constraint_name,
-      listagg(column_name, ', ') within group(order by position) as constraint_column_list
-   from all_cons_columns
-   join all_constraints using (owner, table_name, constraint_name)
-   where
-      constraint_type = 'R' -- R = Referential Foreign Key Constraint
-      and owner not in (
-         select * from owner_exclusion_list
-      )
-   group by owner, table_name, constraint_name
+  select
+    owner,
+    table_name,
+    constraint_name,
+    listagg(column_name, ', ') within group(order by position) as constraint_column_list
+  from all_cons_columns
+  join all_constraints using (owner, table_name, constraint_name)
+  where
+    constraint_type = 'R' -- R = Referential Foreign Key Constraint
+    and owner not in (
+      select username from owner_exclusion_list
+    )
+  group by owner, table_name, constraint_name
 ), index_columns as (
-   select
-      index_owner owner,
-      table_name,
-      index_name,
-      listagg(column_name, ', ') within group(order by column_position) as index_column_list
-   from all_ind_columns
-   where index_owner not in (select * from owner_exclusion_list)
-   group by index_owner, table_name, index_name
+  select
+    index_owner owner,
+    table_name,
+    index_name,
+    listagg(column_name, ', ') within group(order by column_position) as index_column_list
+  from all_ind_columns
+  where index_owner not in (select * from owner_exclusion_list)
+  group by index_owner, table_name, index_name
 ), foreign_key_index_query as (
-   select
-      decode(ic.table_name, null, 'Missing', 'Exists') as index_existence,
-      cc.owner as table_owner,
-      cc.table_name,
-      constraint_name as foreign_key_name,
-      constraint_column_list as foreign_key_column_list,
-      index_name,
-      index_column_list,
-      decode(ic.table_name, null, 'create index '||lower(cc.table_name)||'_idxN'||' on "'||
-                                    cc.owner || '"."'||cc.table_name||'"("'||
-                                    replace(replace(constraint_column_list,',','","'),' ')||'");'
-                                 , null ) as create_index_ddl
-   from constraint_columns cc
-   join all_tables dbat on (
-      dbat.owner = cc.owner
-      and dbat.table_name = cc.table_name
-   )
-   left join index_columns ic on (
-      cc.owner = ic.owner
-      and cc.table_name = ic.table_name
-      and ic.index_column_list like cc.constraint_column_list || '%'
-   )
+  select
+    decode(ic.table_name, null, 'Missing', 'Exists') as index_existence,
+    cc.owner as table_owner,
+    cc.table_name,
+    constraint_name as foreign_key_name,
+    constraint_column_list as foreign_key_column_list,
+    index_name,
+    index_column_list,
+    decode(ic.table_name, null, 'create index '||lower(cc.table_name)||'_idxN'||' on "'||
+                                  cc.owner || '"."'||cc.table_name||'"("'||
+                                  replace(replace(constraint_column_list,',','","'),' ')||'");'
+                                , null ) as create_index_ddl
+  from constraint_columns cc
+  join all_tables dbat on (
+    dbat.owner = cc.owner
+    and dbat.table_name = cc.table_name
+  )
+  left join index_columns ic on (
+    cc.owner = ic.owner
+    and cc.table_name = ic.table_name
+    and ic.index_column_list like cc.constraint_column_list || '%'
+  )
 )
 select
-   table_owner,
-   table_name,
-   foreign_key_name,
-   index_existence,
-   foreign_key_column_list,
-   index_name,
-   index_column_list,
-   create_index_ddl
+  table_owner,
+  table_name,
+  foreign_key_name,
+  index_existence,
+  foreign_key_column_list,
+  index_name,
+  index_column_list,
+  create_index_ddl
 from foreign_key_index_query
 order by
-   table_owner,
-   table_name,
-   foreign_key_column_list
+  table_owner,
+  table_name,
+  foreign_key_column_list
 ;
 alias lspdbs=select name, open_mode from v$pdbs;
 alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%';
