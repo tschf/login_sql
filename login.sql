@@ -27,7 +27,7 @@ REM prompt style 4 - colourised prompt
 REM If we are using SQLcl, it supports the ansiconsole format which gives a much
 REM more pleasant feel. This will silently die in SQL*Plus
 set sqlformat ansiconsole
-set statusbar cwd git timing txn
+-- set statusbar cwd git timing txn
 
 REM load aliases from a separate file
 @sqlcl_aliases.sql
