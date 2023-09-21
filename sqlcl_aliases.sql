@@ -95,8 +95,8 @@ order by
   table_name,
   foreign_key_column_list
 ;
-alias lspdbs=select name, open_mode from v$pdbs;
-alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%';
+alias lspdbs=select name, open_mode from v$pdbs order by 1;
+alias lspdbsf=select name, open_mode from v$pdbs where name like '%' || :name || '%' order by 1;
 alias invalids=select owner, object_type, object_name, status
 from all_objects objs
 join all_users usr on (usr.username = objs.owner and usr.oracle_maintained = 'N')
