@@ -9,9 +9,8 @@ define _editor=vim
 REM A size of 130 gives a good width for the explain plan to be rendered properly
 set linesize 130
 
-REM I do not need SQL*Plus to continually print the column headers, so I will
-REM use a large pagesize
-set pagesize 9999
+REM When there is a low latency, massive page size is no good.
+set pagesize 100
 
 REM The default length of object_name is too long. Reduce the default width
 REM so the query is more readable on the screen. Add any other commonly queried
