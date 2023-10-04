@@ -190,6 +190,11 @@ from (
   )
 ) res;
 alias tabs=select table_name from all_tables where owner = sys_context('USERENV', 'CURRENT_SCHEMA') order by 1;
+alias ut_grant=begin
+  execute immediate 'grant execute on ut3.ut to ' || sys_context('USERENV', 'CURRENT_SCHEMA');
+end;
+/
+alias utp=exec ut3.ut.run(:1);
 
 -- APEX
 alias ausers=select workspace_name, user_name, email, date_created, account_locked from apex_workspace_apex_users;
