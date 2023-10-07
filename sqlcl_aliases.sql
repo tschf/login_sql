@@ -15,6 +15,8 @@ alias logger_prefs=select pref_name, pref_value from logger_prefs;
 alias logger_pref_level=select pref_name, pref_value from logger_prefs where pref_name = 'LOG_LEVEL';
 
 -- COMMON
+-- OCID get from view as documented here: https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/autonomous-database-support-ocid.html#GUID-C2B866BD-379D-46AA-9277-DC78F974FAD2
+alias dbocid=select lower(json_value(cloud_identity, '$.DATABASE_NAME') || ': ' || json_value(cloud_identity, '$.DATABASE_OCID')) ocid from v$pdbs;
 alias dbusers=select username, created from all_users where oracle_maintained = 'N' order by 1;
 alias dbusersf=select username, created from all_users where oracle_maintained = 'N' and username like '%'||upper(:input)||'%' order by 1;
 alias desc2=select
