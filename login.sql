@@ -21,6 +21,8 @@ REM prompt style 1 - uses global_name view to get information about the connecti
 REM prompt style 2 - uses defined variables so no logic - fastest
 REM prompt style 3 - uses sys_context('userenv', ..)
 REM prompt style 4 - colourised prompt
+-- note this (prompt4) doesn't always work with sqlplus since it can evaluate too
+-- long of a prompt
 @prompt4.sql
 
 REM If we are using SQLcl, it supports the ansiconsole format which gives a much
