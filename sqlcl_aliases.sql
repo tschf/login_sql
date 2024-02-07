@@ -114,6 +114,7 @@ alias paramsdefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 
 alias paramsndefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault != 'TRUE' order by 1;
 alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and ismodified = 'MODIFIED' or isadjusted = 'TRUE' order by 1;
 alias param=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, value, description from v$parameter where name = :param;
+set define #
 alias saveconn=q'<
 set define &
 -- no space between id and assignment is important
@@ -209,8 +210,6 @@ alias utp=exec ut3.ut.run(:1);
 alias ausers=select workspace_name, user_name, email, date_created, account_locked from apex_workspace_apex_users;
 alias ausersf=select workspace_name, user_name, email, date_created, account_locked from apex_workspace_apex_users where workspace_name like '%' || upper(:ws) || '%';
 alias aver=select version_no apex_version from apex_release;
-alias aviews=select apex_view_name, comments from apex_dictionary where column_id = 0 order by 1;
-alias aviewsf=select apex_view_name, comments from apex_dictionary where column_id = 0 and apex_view_name like '%' || upper(:view_name) || '%' order by 1;
 set define #
 alias ae=q'<
 set define &
