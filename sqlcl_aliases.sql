@@ -114,6 +114,13 @@ alias paramsdefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 
 alias paramsndefault=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isdefault != 'TRUE' order by 1;
 alias paramsses=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, substr(value, 1, 20) value, substr(description, 1, 50) description from v$parameter where isses_modifiable = 'TRUE' and ismodified = 'MODIFIED' or isadjusted = 'TRUE' order by 1;
 alias param=select name, decode(type, 1, 'Bool', 2, 'String', 3, 'Int', 4, 'Param File', 5, 'Reserved', 6, 'Big Int') type, value, description from v$parameter where name = :param;
+alias saveconn=q'<
+set define &
+-- no space between id and assignment is important
+tosub conname=:conname
+conn -save &conname -savepwd -replace
+>'
+/
 alias trans=select case when dbms_transaction.step_id() is not null then 'Yes' else 'No' end pending_transaction from dual;
 alias tracefile=select value "Session Trace File" from v$diag_info where name = 'Default Trace File';
 alias desc tracefile The full path and filename on the database server of the tracefile for this session
