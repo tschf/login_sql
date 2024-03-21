@@ -28,7 +28,14 @@ REM prompt style 4 - colourised prompt
 REM If we are using SQLcl, it supports the ansiconsole format which gives a much
 REM more pleasant feel. This will silently die in SQL*Plus
 set sqlformat ansiconsole
+
+REM status bar preferences. Turned off because experienced weirdness with it enabled
+REM in the VSCode terminal
 -- set statusbar cwd git timing txn
+
+REM history should log everything
+set history fails
+set history filter none
 
 REM load aliases from a separate file
 @sqlcl_aliases.sql
