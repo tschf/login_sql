@@ -29,6 +29,9 @@ REM If we are using SQLcl, it supports the ansiconsole format which gives a much
 REM more pleasant feel. This will silently die in SQL*Plus
 set sqlformat ansiconsole
 
+REM In 24.1, highlighting colours were added. Lets turn those off
+set highlighting off
+
 REM status bar preferences. Turned off because experienced weirdness with it enabled
 REM in the VSCode terminal
 -- set statusbar cwd git timing txn
@@ -46,6 +49,10 @@ REM project root
 @@project_login.sql
 
 alter session set nls_date_format='DD-MON-YYYY';
+
+REM When setting up aliases, we set a define operator. Most of the time we don't
+REM want define set, so we'll just set it off
+set define off
 
 REM We are all done now, so we can turn termout back on
 set termout on
